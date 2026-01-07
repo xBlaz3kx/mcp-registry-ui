@@ -169,7 +169,7 @@ export const ServerPkg = ({
             </p>
           )}
           {pkg.version && (
-            <p className="text-muted-foreground">
+            <p>
               <span className="text-muted-foreground">🏷️ Version:</span> <code>{pkg.version}</code>
             </p>
           )}

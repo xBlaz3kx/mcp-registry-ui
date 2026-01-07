@@ -1,4 +1,4 @@
-import { Link2, CheckCircle, XCircle, Calendar, House, ChevronDown, Check, Settings } from 'lucide-react';
+import { Link2, CheckCircle, XCircle, Calendar, House, ChevronDown, Check, Settings, FileJson } from 'lucide-react';
 import { useState, useMemo } from 'react';
 
 import type { McpServerDetails, McpServerItem, StackCtrl } from '~/lib/types';
@@ -18,7 +18,8 @@ import { ServerPkg } from './server-pkg';
 import { ServerRemote } from './server-remote';
 import { getRemoteIcon, getPkgIcon } from './server-utils';
 import { Button } from './ui/button';
-import { Dialog, DialogContent, DialogTrigger } from './ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTrigger } from './ui/dialog';
+import { DialogTitle } from '@radix-ui/react-dialog';
 
 /** List and select versions with dropdown */
 const VersionList = ({
@@ -283,6 +284,35 @@ export const ServerCard = ({
                   </TooltipContent>
                 </Tooltip>
               )}
+              {/* View Raw JSON button */}
+              <Tooltip>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <TooltipTrigger asChild>
+                      <button
+                        type="button"
+                        className="flex-shrink-0 p-1 rounded-md hover:bg-accent transition-colors text-muted-foreground"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <FileJson className="h-4 w-4" />
+                      </button>
+                    </TooltipTrigger>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-[90vw] md:max-w-[80vw] lg:max-w-[70vw]">
+                    <DialogHeader>
+                      <DialogTitle className="text-lg font-semibold">
+                        Server entry JSON - {item.server.name}
+                      </DialogTitle>
+                    </DialogHeader>
+                    <pre className="bg-muted p-4 rounded-md overflow-auto text-sm max-h-[80vh]">
+                      <code>{JSON.stringify(displayedItem, null, 2)}</code>
+                    </pre>
+                  </DialogContent>
+                </Dialog>
+                <TooltipContent>
+                  <p>View raw JSON for the server entry in the registry</p>
+                </TooltipContent>
+              </Tooltip>
             </div>
             <CardDescription className="mt-2">{displayedServer.description}</CardDescription>
           </div>

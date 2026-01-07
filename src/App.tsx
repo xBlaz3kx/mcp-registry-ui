@@ -362,7 +362,7 @@ export default function App() {
           setPageCursors(newPageCursors);
           // Compute and set the visible page using the helper to avoid duplicated logic
           changeIndexedPage(currentPage);
-          console.log('Found servers', all);
+          // console.log('Found servers', all);
         } else {
           // Direct API path: keep using idbSearch.search as a local fallback/demo implementation
           // setServers(await idbSearch.search(searchQuery));
