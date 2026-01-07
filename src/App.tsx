@@ -136,8 +136,12 @@ export default function App() {
         // Load persisted "use index" setting
         const savedUseIndex = await idbSearch.get<boolean>('use-index');
         if (typeof savedUseIndex === 'boolean') setUseIndex(savedUseIndex);
-        // NOTE: do NOT call initServers here automatically. We only populate the index
-        // when the user explicitly enables the toggle in the UI.
+
+        // If index is enabled, check for stale data and refresh in background
+        if (savedUseIndex) {
+          if (await idbSearch.isDataStale()) idbSearch.refreshInBackground(registryUrl);
+        }
+
         const savedApiUrl = await idbSearch.get<string>('mcp-registry-api-url');
         if (savedApiUrl) setRegistryUrl(savedApiUrl);
         const savedResultsPerPage = await idbSearch.get<string>('results-per-page');
@@ -153,6 +157,13 @@ export default function App() {
         setSettingsLoaded(true);
       }
     })();
+
+    // Listen for background refresh completion, re-run the search to show updated results
+    const handleServersUpdated = () => {
+      if (useIndex) fetchServers(search, null);
+    };
+    window.addEventListener('servers-updated', handleServersUpdated);
+
     // Listen to back/forward navigation and sync `search` with the URL
     if (typeof window === 'undefined') return;
     const onPop = () => {
@@ -162,7 +173,20 @@ export default function App() {
       } catch {}
     };
     window.addEventListener('popstate', onPop);
-    return () => window.removeEventListener('popstate', onPop);
+
+    // Check for stale data when page becomes visible (user returns to tab)
+    const handleVisibilityChange = async () => {
+      if (document.visibilityState === 'visible' && useIndex) {
+        if (await idbSearch.isDataStale()) idbSearch.refreshInBackground(registryUrl);
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      window.removeEventListener('servers-updated', handleServersUpdated);
+      window.removeEventListener('popstate', onPop);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
