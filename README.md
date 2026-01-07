@@ -7,7 +7,7 @@ Unofficial web UI to browse the [official registry](https://github.com/modelcont
 This web app lets you find available MCP servers, and easily install them into compatible clients such as [Visual Studio Code](https://code.visualstudio.com/docs/copilot/customization/mcp-servers) or [Cursor](https://cursor.com/docs/context/mcp).
 
 - 🌍 Access all MCP servers published to the official MCP registry
-- 🔎 Search by server name, and filter by last published date
+- 🔎 Search by server name, and filter by last published date. Or enable the client-side index to filter by server type (packages. remote) and search in descriptions.
 - 🏷️ Browse the published versions of a server
 - ⚙️ Configure MCP servers installation through a user-friendly form
 - 📥 Install MCP servers into compatible clients in 1 click (VSCode and Cursor)
@@ -100,5 +100,4 @@ npm version patch
 
 ## ✅ To do
 
-- [ ] Improve filtering: filter by status and server type (stdio, http, sse). Would require new features on the registry API, or handling filters on the client.
 - [ ] Support [mcpb](https://github.com/anthropics/mcpb)?
