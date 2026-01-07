@@ -8,6 +8,8 @@ export class IndexedDB {
   private dbName = 'McpRegistryDB';
   private settingsStore = 'user-settings';
   private serversStore = 'mcp-servers';
+  private lastFetchKey = 'servers-last-fetch';
+  private cacheMaxAge = 24 * 60 * 60 * 1000; // 24 hours
 
   async init() {
     if (typeof window === 'undefined') return null;
@@ -104,11 +106,26 @@ export class IndexedDB {
     await this.set('mcp-servers-stack', stack);
   }
 
+  /** Get timestamp of last server fetch */
+  async getLastFetchTime(): Promise<number> {
+    return (await this.get<number>(this.lastFetchKey)) || 0;
+  }
+
+  /** Set timestamp of last server fetch */
+  async setLastFetchTime(timestamp: number): Promise<void> {
+    await this.set(this.lastFetchKey, timestamp);
+  }
+
+  /** Check if cached server data is stale */
+  async isDataStale(): Promise<boolean> {
+    return Date.now() - (await this.getLastFetchTime()) > this.cacheMaxAge;
+  }
+
   // NOTE: can use IndexedDB as a basic search store for MCP servers
 
   /**
    * Initialize servers in IndexedDB.
-   * By default this will not re-fetch if the DB already contains servers.
+   * By default this will not re-fetch if the DB already contains fresh servers.
    * Set `forceRefresh` to true to always re-fetch and replace stored servers.
    */
   async initServers(registryUrl: string, forceRefresh = false) {
@@ -117,11 +134,15 @@ export class IndexedDB {
     try {
       const db = await this.init();
       if (!db) return null;
-      // If we already have servers stored and no forced refresh requested, skip fetching
-      if (!forceRefresh) {
-        const has = await this.hasServers();
-        if (has) return this.db;
+
+      const hasServers = await this.hasServers();
+      const isStale = await this.isDataStale();
+
+      // Skip fetching if: not forced, has servers, and data is fresh
+      if (!forceRefresh && hasServers && !isStale) {
+        return this.db;
       }
+
       // Attempt to fetch servers. On failure, preserve existing DB contents instead of clearing them.
       const docs = await fetchAllServers(registryUrl).catch((err) => {
         console.warn('Failed to fetch servers for initServers:', err);
@@ -131,11 +152,35 @@ export class IndexedDB {
       if (!docs) return this.db;
       // Save using the existing saveServers method which handles clearing and writing
       await this.saveServers(docs || []);
+      await this.setLastFetchTime(Date.now());
       return this.db;
     } catch (err) {
       console.warn('initServers failed:', err);
       return null;
     }
+  }
+
+  /**
+   * Refresh servers in the background without blocking.
+   * Dispatches 'servers-updated' event when complete.
+   */
+  async refreshInBackground(registryUrl: string): Promise<void> {
+    setTimeout(async () => {
+      try {
+        console.log('Starting background server refresh...');
+        const docs = await fetchAllServers(registryUrl);
+        await this.saveServers(docs);
+        await this.setLastFetchTime(Date.now());
+        console.log('IndexedDB refresh completed');
+
+        // Dispatch custom event to notify UI
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('servers-updated', { detail: { count: docs.length } }));
+        }
+      } catch (err) {
+        console.warn('IndexedDB refresh failed:', err);
+      }
+    }, 0);
   }
 
   async search(term: string): Promise<McpServerItem[]> {
