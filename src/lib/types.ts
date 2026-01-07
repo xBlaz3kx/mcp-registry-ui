@@ -84,6 +84,7 @@ export interface McpServerRemote {
   type: string;
   url?: string;
   headers?: Array<EnvVarOrHeader>;
+  variables?: Record<string, EnvVarOrHeader>;
 }
 
 export interface EnvVarOrHeader {

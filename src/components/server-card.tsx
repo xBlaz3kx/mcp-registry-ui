@@ -347,9 +347,17 @@ export const ServerCard = ({
                   <Button variant="outline" size="sm" className="text-xs" onClick={(e) => e.stopPropagation()}>
                     {getRemoteIcon(remote)}
                     <span className="break- font-mono text-muted-foreground">
-                      {remote.url?.replace('https://', '')}
+                      {(() => {
+                        let displayUrl = remote.url?.replace('https://', '') || '';
+                        if (remote.variables) {
+                          Object.entries(remote.variables).forEach(([key, varDef]) => {
+                            displayUrl = displayUrl.replace(`{${key}}`, String(varDef.default ?? `{${key}}`));
+                          });
+                        }
+                        return displayUrl;
+                      })()}
                     </span>
-                    {remote.headers && Object.keys(remote.headers).length > 0 && (
+                    {((remote.headers && remote.headers.length > 0) || remote.variables) && (
                       <Settings className="text-slate-400 flex-shrink-0" />
                     )}
                   </Button>
