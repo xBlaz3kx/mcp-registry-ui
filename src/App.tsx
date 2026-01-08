@@ -540,16 +540,16 @@ export default function App() {
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation header */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
         <div className="container flex flex-col sm:flex-row sm:h-16 items-start sm:items-center justify-between gap-3 sm:gap-0 px-4 py-3 sm:py-0 mx-auto max-w-7xl">
           <div
             role="button"
             tabIndex={0}
             aria-label="Clear search"
             onClick={() => doSearch('')}
-            className="flex items-center gap-2 flex-shrink-0 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded"
+            className="flex items-center gap-2 shrink-0 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded"
           >
-            <img src={McpLogo} alt="MCP logo" className="h-5 w-5 [filter:invert(0)] dark:[filter:invert(1)]" />
+            <img src={McpLogo} alt="MCP logo" className="h-5 w-5 filter-[invert(0)] dark:filter-[invert(1)]" />
             <h1 className="text-lg">MCP Registry</h1>
           </div>
           <div className="flex items-center gap-4 flex-1 w-full sm:w-auto justify-end max-w-2xl">
@@ -557,7 +557,7 @@ export default function App() {
             <Tooltip>
               <TooltipTrigger asChild>
                 <div className="flex items-center gap-2 flex-1 min-w-0">
-                  <Unplug className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                  <Unplug className="h-4 w-4 text-muted-foreground shrink-0" />
                   <input
                     type="text"
                     placeholder="Registry API URL"
@@ -571,7 +571,7 @@ export default function App() {
                 <p>Change the URL of the MCP registry used</p>
               </TooltipContent>
             </Tooltip>
-            <nav className="flex items-center gap-4 flex-shrink-0">
+            <nav className="flex items-center gap-4 shrink-0">
               {/* Stack Dropdown */}
               <DropdownMenu>
                 <Tooltip>
@@ -686,7 +686,7 @@ export default function App() {
                           <img
                             src={CursorLogo}
                             alt="Cursor"
-                            className="h-4 w-4 [filter:invert(0)] dark:[filter:invert(1)]"
+                            className="h-4 w-4 filter-[invert(0)] dark:filter-[invert(1)]"
                           />
                           Download Cursor <code>mcp.json</code>
                         </DropdownMenuItem>
@@ -717,7 +717,7 @@ export default function App() {
                     <img
                       src={GithubLogo}
                       alt="GitHub"
-                      className="h-5 w-5  [filter:invert(0)] dark:[filter:invert(0.6)]"
+                      className="h-5 w-5  filter-[invert(0)] dark:filter-[invert(0.6)]"
                     />
                   </a>
                 </TooltipTrigger>
@@ -834,7 +834,7 @@ export default function App() {
                             }
                           />
                           <span className="text-sm">Other</span>
-                          <Package className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                          <Package className="h-4 w-4 text-muted-foreground shrink-0" />
                         </label>
                       </div>
                     </div>

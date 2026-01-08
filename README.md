@@ -100,4 +100,5 @@ npm version patch
 
 ## ✅ To do
 
-- [ ] Support [mcpb](https://github.com/anthropics/mcpb)?
+- [ ] Support [mcpb](https://github.com/anthropics/mcpb), e.g. `agent-payment-mcp` or `touchdesigner-mcp-server`
+- [ ] Support variables in environmentVariables, e.g. `Knapcode.SampleMcpServer`

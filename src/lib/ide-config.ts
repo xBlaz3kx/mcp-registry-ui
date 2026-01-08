@@ -6,7 +6,6 @@ export const buildIdeConfigForRemote = (remote: McpServerRemote): McpIdeConfigRe
     type: remote.type === 'streamable-http' ? 'http' : remote.type,
     url: remote.url,
   };
-  // TODO: Add headers if present
   if (remote.headers && remote.headers.length > 0) {
     config.headers = {};
     remote.headers.forEach((header) => {
