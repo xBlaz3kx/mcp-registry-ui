@@ -173,6 +173,24 @@ export const ServerPkg = ({
               <span className="text-muted-foreground">🏷️ Version:</span> <code>{pkg.version}</code>
             </p>
           )}
+          {pkg.transport && (
+            <p>
+              <span className="text-muted-foreground">🚛 Transport:</span> <code>{pkg.transport.type}</code>
+              {pkg.transport.url && (
+                <>
+                  {' '}
+                  <a
+                    href={pkg.transport.url}
+                    className="hover:text-muted-foreground"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {pkg.transport.url}
+                  </a>
+                </>
+              )}
+            </p>
+          )}
           {pkg.runtimeHint && (
             <p>
               <span className="text-muted-foreground">💡 Runtime hint:</span> <code>{pkg.runtimeHint}</code>

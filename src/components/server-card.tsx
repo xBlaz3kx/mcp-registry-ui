@@ -60,7 +60,7 @@ const VersionList = ({
             }}
           >
             <div className="flex flex-col">
-              <span className="text-sm">v{v}</span>
+              <span className="text-sm">{v}</span>
               {publishedAt && (
                 <span className="text-xs text-muted-foreground">{formatDate(new Date(publishedAt))}</span>
               )}
@@ -169,7 +169,7 @@ export const ServerCard = ({
                         variant="outline"
                         className="text-xs text-muted-foreground bg-muted hover:bg-zinc-200 dark:hover:bg-zinc-700 hover:cursor-pointer flex items-center gap-1"
                       >
-                        v{displayedServer.version}
+                        {displayedServer.version}
                         <ChevronDown className="h-3 w-3" />
                       </Badge>
                     </button>

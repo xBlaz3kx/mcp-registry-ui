@@ -54,23 +54,34 @@ export const getPkgIcon = (pkg: McpServerPkg) => {
 
 /** Get URL to view the package in its registry */
 export const getPkgUrl = (pkg: McpServerPkg) => {
-  // Determine base registry URL (in case not defined, default to docker)
-  const registryUrl = pkg.registryBaseUrl
-    ? pkg.registryBaseUrl
-    : pkg.registryType === 'npm'
-      ? 'https://registry.npmjs.com'
-      : pkg.registryType === 'pypi'
-        ? 'https://pypi.org'
-        : pkg.registryType === 'nuget'
-          ? 'https://api.nuget.org'
-          : 'https://docker.io';
-  return pkg.registryType === 'npm'
-    ? `${registryUrl.replace('registry', 'www')}/package/${pkg.identifier}`
-    : pkg.registryType === 'pypi'
-      ? `${registryUrl}/project/${pkg.identifier}/`
-      : pkg.registryType === 'oci' && registryUrl.startsWith('https://docker.io')
-        ? `https://hub.docker.com/r/${pkg.identifier}`
-        : `${registryUrl}/${pkg.identifier}`;
+  if (pkg.registryType === 'npm') {
+    const registryUrl = pkg.registryBaseUrl || 'https://registry.npmjs.com';
+    return `${registryUrl.replace('registry', 'www')}/package/${pkg.identifier}`;
+  }
+  if (pkg.registryType === 'pypi') {
+    return `${pkg.registryBaseUrl || 'https://pypi.org'}/project/${pkg.identifier}/`;
+  }
+  if (pkg.registryType === 'oci') {
+    if (pkg.identifier.startsWith('docker.io/')) {
+      const cleanIdentifier = pkg.identifier.replace('docker.io/', '').split(':')[0];
+      return `https://hub.docker.com/r/${cleanIdentifier}`;
+    }
+    // If identifier has less than 3 parts when split by /, default to Docker Hub
+    if (pkg.identifier.split('/').length < 3) {
+      return `https://hub.docker.com/r/${pkg.identifier.split(':')[0]}`;
+    }
+    // Otherwise, use the identifier as a full URL (e.g., ghcr.io/org/image:tag)
+    return `https://${pkg.identifier}`;
+  }
+  if (pkg.registryType === 'nuget') {
+    // return `https://www.nuget.org/packages/${pkg.identifier}/`;
+    const registryUrl = pkg.registryBaseUrl || 'https://api.nuget.org/v3/index.json';
+    return `${registryUrl.replace('api', 'www').replace(/\/v\d+\/index\.json$/, '')}/packages/${pkg.identifier}`;
+  }
+  // https://api.nuget.org/TimeMcpServer
+  const registryUrl = pkg.registryBaseUrl || '';
+  if (!registryUrl) return pkg.identifier;
+  return `${registryUrl}/${pkg.identifier}`;
 };
 
 /** Get default pkg command based on type */
