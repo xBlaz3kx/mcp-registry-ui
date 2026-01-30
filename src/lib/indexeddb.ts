@@ -310,7 +310,7 @@ const fetchAllServers = async (apiUrl: string): Promise<McpServerItem[]> => {
       baseUrl += `?${params.join('&')}`;
     }
     // Wrap with CORS proxy
-    const proxyUrl = `https://corsproxy.io/?url=${encodeURIComponent(baseUrl)}`;
+    const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(baseUrl)}`;
     console.log('Fetching all servers URL:', proxyUrl);
     const response = await fetch(proxyUrl, {
       method: 'GET',

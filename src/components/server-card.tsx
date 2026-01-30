@@ -96,7 +96,7 @@ export const ServerCard = ({
     try {
       const url = `${registryUrl}/${encodeURIComponent(item.server.name)}/versions`;
       // Then wrap it with the CORS proxy
-      const proxyUrl = `https://corsproxy.io/?url=${encodeURIComponent(url)}`;
+      const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
       const res = await fetch(proxyUrl, {
         method: 'GET',
         headers: { Accept: 'application/json, application/problem+json' },

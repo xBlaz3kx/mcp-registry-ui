@@ -15,10 +15,6 @@ This web app lets you find available MCP servers, and easily install them into c
 - 🔌 Point the web UI at any compatible registry URL
 - 🦊 Runs entirely in the browser, and fetches data directly from [registry.modelcontextprotocol.io](https://registry.modelcontextprotocol.io/docs)
 
-> [!NOTE]
->
-> Contributions welcome, in particular regarding integration of new clients install links/config.
-
 ## 📥 Installation
 
 Install dependencies:
