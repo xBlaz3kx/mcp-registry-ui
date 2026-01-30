@@ -96,8 +96,8 @@ export const ServerCard = ({
     try {
       const url = `${registryUrl}/${encodeURIComponent(item.server.name)}/versions`;
       // Then wrap it with the CORS proxy
-      const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
-      const res = await fetch(proxyUrl, {
+      // const res = await fetch(proxyUrl(url), {
+      const res = await fetch(url, {
         method: 'GET',
         headers: { Accept: 'application/json, application/problem+json' },
         cache: 'force-cache' as const,
@@ -131,13 +131,13 @@ export const ServerCard = ({
       <CardHeader>
         <div className="flex items-start justify-between gap-2">
           <div className="flex-1 min-w-0">
-            <CardTitle className="text-md break-words mb-2">{item.server.name}</CardTitle>
+            <CardTitle className="text-md wrap-break-word mb-2">{item.server.name}</CardTitle>
             <div className="flex items-center gap-2 mb-1">
               {/* Status indicator */}
               {itemMeta?.status && (
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <div className="flex-shrink-0">
+                    <div className="shrink-0">
                       {itemMeta.status === 'active' ? (
                         <CheckCircle className="h-4 w-4 text-green-700" />
                       ) : (
@@ -189,7 +189,7 @@ export const ServerCard = ({
               {itemMeta?.publishedAt && (
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <div className="flex text-muted-foreground items-center gap-1 flex-shrink-0">
+                    <div className="flex text-muted-foreground items-center gap-1 shrink-0">
                       <Calendar className="h-4 w-4" />
                       <span className="text-xs">
                         {(() => formatDate(new Date(itemMeta.updatedAt || itemMeta.publishedAt)))()}
@@ -218,14 +218,14 @@ export const ServerCard = ({
                       href={displayedServer.repository.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-shrink-0 p-1 rounded-md hover:bg-accent transition-colors"
+                      className="shrink-0 p-1 rounded-md hover:bg-accent transition-colors"
                       onClick={(e) => e.stopPropagation()}
                     >
                       {displayedServer.repository?.source === 'github' ? (
                         <img
                           src={GithubLogo}
                           alt="GitHub"
-                          className="h-4 w-4  [filter:invert(0)] dark:[filter:invert(0.6)]"
+                          className="h-4 w-4  filter-[invert(0)] dark:filter-[invert(0.6)]"
                         />
                       ) : (
                         <Link2 className="h-4 w-4" />
@@ -264,7 +264,7 @@ export const ServerCard = ({
                       href={displayedServer.websiteUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-shrink-0 p-1 rounded-md hover:bg-accent transition-colors text-muted-foreground"
+                      className="shrink-0 p-1 rounded-md hover:bg-accent transition-colors text-muted-foreground"
                       onClick={(e) => e.stopPropagation()}
                     >
                       <House className="h-4 w-4" />
@@ -291,7 +291,7 @@ export const ServerCard = ({
                     <TooltipTrigger asChild>
                       <button
                         type="button"
-                        className="flex-shrink-0 p-1 rounded-md hover:bg-accent transition-colors text-muted-foreground"
+                        className="shrink-0 p-1 rounded-md hover:bg-accent transition-colors text-muted-foreground"
                         onClick={(e) => e.stopPropagation()}
                       >
                         <FileJson className="h-4 w-4" />
@@ -330,7 +330,7 @@ export const ServerCard = ({
                     {getPkgIcon(pkg)}
                     <span className="font-mono text-muted-foreground">{pkg.identifier}</span>
                     {pkg.environmentVariables && Object.keys(pkg.environmentVariables).length > 0 && (
-                      <Settings className="text-slate-400 flex-shrink-0" />
+                      <Settings className="text-slate-400 shrink-0" />
                     )}
                   </Button>
                 </DialogTrigger>
@@ -358,7 +358,7 @@ export const ServerCard = ({
                       })()}
                     </span>
                     {((remote.headers && remote.headers.length > 0) || remote.variables) && (
-                      <Settings className="text-slate-400 flex-shrink-0" />
+                      <Settings className="text-slate-400 shrink-0" />
                     )}
                   </Button>
                 </DialogTrigger>

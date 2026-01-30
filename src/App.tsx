@@ -397,10 +397,8 @@ export default function App() {
           if (cursor) params.push(`cursor=${encodeURIComponent(cursor)}`);
           if (filterDate) params.push(`updated_since=${encodeURIComponent(filterDate.toISOString())}`);
           if (params.length > 0) baseUrl += `?${params.join('&')}`;
-          // Wrap API URL with the CORS proxy
-          const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(baseUrl)}`;
-          // console.log('Fetching URL:', proxyUrl);
-          const response = await fetch(proxyUrl, {
+          // const response = await fetch(proxyUrl(baseUrl), {
+          const response = await fetch(baseUrl, {
             method: 'GET',
             headers: { Accept: 'application/json, application/problem+json' },
             cache: 'force-cache' as const,

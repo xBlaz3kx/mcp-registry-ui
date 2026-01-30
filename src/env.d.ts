@@ -1,0 +1,1 @@
+declare const __REGISTRY_URL__: string;

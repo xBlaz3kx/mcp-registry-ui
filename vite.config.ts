@@ -4,7 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/mcp-registry/',
+  base: process.env.BASE_PATH ?? '/mcp-registry/',
   resolve: {
     alias: { '~': '/src' },
   },
