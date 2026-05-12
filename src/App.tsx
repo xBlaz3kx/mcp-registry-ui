@@ -51,7 +51,9 @@ import { idbSearch } from '~/lib/indexeddb';
 // Empty packages: com.falkordb/QueryWeaver
 
 export default function App() {
-  const [registryUrl, setRegistryUrl] = useState('https://registry.modelcontextprotocol.io/v0.1/servers');
+  const [registryUrl, setRegistryUrl] = useState(
+    __REGISTRY_URL__ || 'https://registry.modelcontextprotocol.io/v0.1/servers'
+  );
   const [servers, setServers] = useState<McpServerItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

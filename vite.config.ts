@@ -4,7 +4,10 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: process.env.BASE_PATH ?? '/mcp-registry/',
+  base: '/mcp-registry/',
+  define: {
+    __REGISTRY_URL__: JSON.stringify(process.env.REGISTRY_URL ?? ''),
+  },
   resolve: {
     alias: { '~': '/src' },
   },
